@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Trivia Game</title>
+    <meta charset="UTF-8">
+    <title>My API Trivia Game</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Trivia Game 🎮</h1>
-  <p id="question">Loading question...</p>
-  <div id="answers"></div>
-  <p id="result"></p>
-
-  <button onclick="loadQuestion()">Next Question</button>
-
-  <script src="script.js"></script>
+    <div class="container">
+        <h1>Trivia Master 🎮</h1>
+        <div id="game-card">
+            <p id="question">Click the button to start!</p>
+            <div id="answer-buttons">
+                </div>
+            <p id="result"></p>
+        </div>
+        <button id="next-btn" onclick="getQuestion()">New Question</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
