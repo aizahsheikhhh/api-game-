@@ -1,33 +1,39 @@
-async function loadQuestion() {
-  const res = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
-  const data = await res.json();
+async function getQuestion() {
+    const resultText = document.getElementById('result');
+    const questionText = document.getElementById('question');
+    const answerDiv = document.getElementById('answer-buttons');
+    
+    resultText.innerText = "";
+    questionText.innerText = "Loading...";
+    answerDiv.innerHTML = "";
 
-  const q = data.results[0];
+    try {
+        const response = await fetch('https://opentdb.com/api.php?amount=1&type=multiple');
+        const data = await response.json();
+        const item = data.results[0];
 
-  document.getElementById("question").innerHTML = q.question;
+        questionText.innerHTML = item.question;
 
-  const answers = [...q.incorrect_answers, q.correct_answer];
-  answers.sort(() => Math.random() - 0.5);
+        // Mix the correct answer with the wrong ones
+        let answers = [...item.incorrect_answers];
+        answers.push(item.correct_answer);
+        answers.sort(() => Math.random() - 0.5);
 
-  const answersDiv = document.getElementById("answers");
-  answersDiv.innerHTML = "";
-
-  answers.forEach(ans => {
-    const btn = document.createElement("button");
-    btn.innerHTML = ans;
-    btn.onclick = () => checkAnswer(ans, q.correct_answer);
-    answersDiv.appendChild(btn);
-  });
+        answers.forEach(ans => {
+            const btn = document.createElement('button');
+            btn.innerHTML = ans;
+            btn.onclick = () => {
+                if(ans === item.correct_answer) {
+                    resultText.innerText = "Correct! 🎉";
+                    resultText.style.color = "green";
+                } else {
+                    resultText.innerText = "Wrong! It was: " + item.correct_answer;
+                    resultText.style.color = "red";
+                }
+            };
+            answerDiv.appendChild(btn);
+        });
+    } catch (error) {
+        questionText.innerText = "Error loading question. Try again!";
+    }
 }
-
-function checkAnswer(selected, correct) {
-  const result = document.getElementById("result");
-
-  if (selected === correct) {
-    result.innerText = "✅ Correct!";
-  } else {
-    result.innerText = "❌ Wrong! Correct: " + correct;
-  }
-}
-
-loadQuestion();
